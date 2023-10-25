@@ -1,17 +1,22 @@
 "use client"
 
 import { twMerge } from 'tailwind-merge'
+
+import { toast } from "react-hot-toast";
+
 import { HiHome } from 'react-icons/hi'
 import { BiSearch } from 'react-icons/bi'
 import { FaUserAlt } from "react-icons/fa";
-import { useUser } from "@/hooks/useUser";
-import { useRouter } from "next/navigation";
 import { RxCaretLeft, RxCaretRight } from 'react-icons/rx'
+
+import { useUser } from "@/hooks/useUser";
+import useAuthModal from "@/hooks/useAuthModal";
+import usePlayer from '@/hooks/usePlayer';
+
+import { useRouter } from "next/navigation";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 import Button from "./Button";
-import useAuthModal from "@/hooks/useAuthModal";
-import toast from "react-hot-toast/headless";
 
 
 interface HeaderProps {
@@ -41,8 +46,11 @@ const Header: React.FC<HeaderProps> = ({
         }
     }
 
+    const player = usePlayer()
+
     return ( 
-        <div className={twMerge(`h-fit bg-gradient-to-b from-emerald-800 p-6`, 
+        <div className={twMerge(`
+            h-fit bg-gradient-to-b from-emerald-800 p-6`, 
             className)}
         >
             <div className="w-full mb-4 flex items-center justify-between">
@@ -61,10 +69,14 @@ const Header: React.FC<HeaderProps> = ({
                     </button>
                 </div>
                 <div className="flex md:hidden gap-x-2 items-center">
-                    <button className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75 transition">
+                    <button 
+                        onClick={()=> router.push('/')}
+                        className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75 transition">
                         <HiHome className="text-black" size={20}/>
                     </button>
-                    <button className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75 transition">
+                    <button 
+                        onClick={() => router.push('/search')}
+                        className="rounded-full p-2 bg-white flex items-center justify-center hover:opacity-75 transition">
                         <BiSearch className="text-black" size={20}/>
                     </button>
                 </div>
