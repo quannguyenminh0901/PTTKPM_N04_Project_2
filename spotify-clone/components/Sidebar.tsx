@@ -1,14 +1,18 @@
 "use client"
 
 import { usePathname } from "next/navigation";
+
 import { useMemo } from 'react'
 import { HiHome } from 'react-icons/hi'
 import { BiSearch } from 'react-icons/bi' 
+
 import Box from "./Box";
 import SidebarItem from "./SidebarItem";
+
 import Library from "./Library";
 import { Song } from "@/type";
 import usePlayer from "@/hooks/usePlayer";
+
 import { twMerge } from "tailwind-merge";
 interface SidebarProps {
     children: React.ReactNode;

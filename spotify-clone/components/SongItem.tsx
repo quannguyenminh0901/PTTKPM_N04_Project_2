@@ -4,6 +4,7 @@ import useLoadingImage from "@/hooks/useLoadingImage";
 import { Song } from "@/type";
 import Image from 'next/image'
 import PlayButton from "./PlayButton";
+import usePlayer from "@/hooks/usePlayer";
 
 interface SongItemProps {
     data: Song;
@@ -14,11 +15,18 @@ const SongItem: React.FC<SongItemProps> = ({
     data,
     onClick
 }) => {
+    const player = usePlayer();
+    const handleClick = () => {
+        if (onClick) {
+          return onClick(data.id);
+        }
+      
+        return player.setId(data.id);
+      };
     const imagePath = useLoadingImage(data)
 
     return ( 
         <div
-            onClick={() => onClick(data.id)}
             className="
                 relative group flex flex-col items-center justify-center
                 rounded-md overflow-hidden gap-x-4 bg-neutral-400/5
@@ -36,15 +44,15 @@ const SongItem: React.FC<SongItemProps> = ({
             </div>
             <div className="flex flex-col items-start w-full p-4 gap-y-1">
                 <p className="font-semibold truncate w-full">
-                  {data.title}  
+                    {data.title}  
                 </p>
                 <p className="text-neutral-400 text-sm pb-4 w-full truncate">
-                    By {data.author}
+                    {data.author}
                 </p>
             </div>
             <div className="
             absolute bottom-24 right-5">
-                <PlayButton />
+                <PlayButton onClick={handleClick}/>
             </div>
         </div>
      );

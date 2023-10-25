@@ -1,14 +1,13 @@
 "use client";
 
-const useSound = require('use-sound')
-
-import { useEffect, useState } from "react";
+import { useEffect ,useState } from "react";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 
 import { Song } from "@/type";
 import usePlayer from "@/hooks/usePlayer";
+import useSound from "@/hooks/useSound";
 
 import LikeButton from "./LikeButton";
 import MediaItem from "./MediaItem";
@@ -31,6 +30,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
+  //Next song
   const onPlayNext = () => {
     if (player.ids.length === 0) {
       return;
@@ -46,6 +46,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     player.setId(nextSong);
   }
 
+  //Previous song
   const onPlayPrevious = () => {
     if (player.ids.length === 0) {
       return;
@@ -61,25 +62,24 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
     player.setId(previousSong);
   }
 
-  const [play, { pause, sound }] = useSound(
-    songUrl,
-    { 
-      volume: volume,
-      onplay: () => setIsPlaying(true),
-      onend: () => {
-        setIsPlaying(false);
-        onPlayNext();
-      },
-      onpause: () => setIsPlaying(false),
-      format: ['mp3']
-    }
-  );
+  const soundResult = useSound(songUrl, { 
+    volume: volume,
+    onplay: () => setIsPlaying(true),
+    onend: () => {
+      setIsPlaying(false);
+      onPlayNext();
+    },
+    onpause: () => setIsPlaying(false),
+    format: ['mp3']
+  });
+  
+  const { play, pause, sound } = soundResult; 
 
   useEffect(() => {
     sound?.play();
     
     return () => {
-      sound?.unload();
+      sound?.load();
     }
   }, [sound]);
 
@@ -98,6 +98,8 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
       setVolume(0);
     }
   }
+  
+ 
 
   return ( 
     <div className="grid grid-cols-2 md:grid-cols-3 h-full">
@@ -113,7 +115,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
             flex md:hidden col-auto w-full justify-end items-center"
         >
           <div 
-            onClick={handlePlay} 
+            onClick={()=>{}} 
             className="
               h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
           >
@@ -132,7 +134,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
               text-neutral-400 cursor-pointer hover:text-white transition"
           />
           <div 
-            onClick={handlePlay} 
+            onClick={()=>{}} 
             className="
               flex items-center justify-center h-10 w-10 rounded-full bg-white p-1 cursor-pointer"
           >
@@ -146,7 +148,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({
         <div className="hidden md:flex w-full justify-end pr-2">
           <div className="flex items-center gap-x-2 w-[120px]">
             <VolumeIcon 
-              onClick={toggleMute} 
+              onClick={()=>{}} 
               className="cursor-pointer" 
               size={34} 
             />
